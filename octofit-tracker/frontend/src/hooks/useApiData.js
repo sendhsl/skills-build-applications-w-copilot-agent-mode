@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { fetchApiList } from '../config/api';
+import { fetchJsonList } from '../config/api';
 
 /**
- * Fetches a resource collection from the API and keeps loading/error state.
+ * Fetches a list from a full API `url` and keeps loading/error state.
  * Accepts both plain array and paginated ({ results: [...] }) responses via
- * `fetchApiList`.
+ * `fetchJsonList`.
  */
-export function useApiData(resource) {
+export function useApiData(url) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ export function useApiData(resource) {
         if (ignore) return undefined;
         setLoading(true);
         setError(null);
-        return fetchApiList(resource);
+        return fetchJsonList(url);
       })
       .then((items) => {
         if (!ignore && items !== undefined) setData(items);
@@ -36,7 +36,7 @@ export function useApiData(resource) {
     return () => {
       ignore = true;
     };
-  }, [resource]);
+  }, [url]);
 
   return { data, loading, error };
 }
